@@ -27,7 +27,9 @@ public class ProyectoDataBase {
         
         try {
             
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javadatabase", "leno", "123456a");
+            //connection = DriverManager.getConnection(DBUtils.MYSQL_DB, DBUtils.MYSQL_USER, DBUtils.MYSQL_PASS);
+            
+            connection = DBUtils.getConnection(DBType.MYSQLDB);
             
             //*****OBTENER*****
             //Solo recibes la consulta con INSENSITIVE pero no las actualizaciones o lo que pase despues
@@ -90,9 +92,15 @@ public class ProyectoDataBase {
             }
             
         } catch (SQLException e) {
-            System.out.println("Ha ocurrido el siguiente error: " + e);
+            DBUtils.processException(e);
         }
         finally{
+            if(statement != null){
+                statement.close();;
+            }
+            if(resultSet != null){
+                resultSet.close();
+            }
             if (connection != null) {
                 connection.close();
             }
